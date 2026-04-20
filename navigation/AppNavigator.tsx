@@ -1,6 +1,6 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
-import HomeScreen from '../screens/app/HomeScreen';
+import HomeStack from './HomeStack';
 import SearchScreen from '../screens/app/SearchScreen';
 import FavoritesScreen from '../screens/app/FavoritesScreen';
 import ProfileScreen from '../screens/app/ProfileScreen';
@@ -32,7 +32,7 @@ export default function AppNavigator() {
         },
       })}
     >
-      <Tab.Screen name="Home" component={HomeScreen} options={{ title: 'Inicio' }} />
+      <Tab.Screen name="Home" component={HomeStack} options={{ title: 'Inicio' }} />
       <Tab.Screen name="Search" component={SearchScreen} options={{ title: 'Buscar' }} />
       <Tab.Screen name="Favorites" component={FavoritesScreen} options={{ title: 'Favoritos' }} />
       <Tab.Screen name="Profile" component={ProfileScreen} options={{ title: 'Perfil' }} />

@@ -5,7 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { getInstitutions } from '../../services/institutions';
 import { Institution } from '../../types/database';
 
-export default function HomeScreen() {
+export default function HomeScreen({ navigation }: any) {
   const [institutions, setInstitutions] = useState<Institution[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -84,7 +84,7 @@ export default function HomeScreen() {
             </View>
           ) : (
             institutions.map((inst) => (
-              <TouchableOpacity key={inst.id} style={styles.card} activeOpacity={0.7}>
+              <TouchableOpacity key={inst.id} style={styles.card} activeOpacity={0.7} onPress={() => navigation.navigate('InstitutionDetail', { institution: inst })}>
                 <View style={styles.cardIcon}>
                   <Ionicons name={getInstitutionIcon(inst.type)} size={28} color="#0af" />
                 </View>
