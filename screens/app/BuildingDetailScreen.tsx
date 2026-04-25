@@ -83,6 +83,15 @@ export default function BuildingDetailScreen({ route, navigation }: any) {
         </View>
       </View>
 
+      <TouchableOpacity
+        style={styles.planButton}
+        onPress={() => navigation.navigate('FloorPlan', { building: building })}
+      >
+        <Ionicons name="map" size={22} color="#0af" />
+        <Text style={styles.planButtonText}>Ver plano interior</Text>
+        <Ionicons name="chevron-forward" size={20} color="#0af" />
+      </TouchableOpacity>
+
       {loading ? (
         <View style={styles.centered}>
           <ActivityIndicator size="large" color="#0af" />
@@ -191,4 +200,14 @@ const styles = StyleSheet.create({
   errorBox: { alignItems: 'center', padding: 24, margin: 16, backgroundColor: '#2a1a1a', borderRadius: 12 },
   errorTitle: { fontSize: 16, fontWeight: 'bold', color: '#f44', marginTop: 12 },
   errorText: { color: '#faa', textAlign: 'center', marginTop: 8, fontSize: 13 },
+  planButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#2a2a2a',
+    marginHorizontal: 16,
+    marginBottom: 8,
+    padding: 14,
+    borderRadius: 12,
+  },
+  planButtonText: { color: '#0af', fontWeight: '600', fontSize: 15, marginLeft: 10, flex: 1 },
 });
