@@ -50,30 +50,8 @@ export async function searchPoints(query: string): Promise<{ data: any[]; error:
     return { data: [], error: null };
   }
 
-  const searchTerm = `%${query.trim()}%`;
-
   const { data, error } = await supabase
-    .from('points_of_interest')
-    .select(`
-      *,
-      floors (
-        id,
-        name,
-        level,
-        buildings (
-          id,
-          name,
-          institution_id,
-          institutions (
-            id,
-            name
-          )
-        )
-      )
-    `)
-    .or(`name.ilike.${searchTerm},description.ilike.${searchTerm}`)
-    .order('name', { ascending: true })
-    .limit(30);
+    .rpc('search_points', { q: query.trim() });
 
   if (error) return { data: [], error: error.message };
   return { data: data || [], error: null };
