@@ -5,23 +5,40 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "dark",
     "newArchEnabled": true,
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#1a1a1a"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.miguel.ubicat",
+      "config": {
+        "googleMapsApiKey": "AIzaSyDzPtZOLoAz6sESAG8Xx6cRLhwAgVEOFtc"
+      },
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "UbicaT usa tu ubicación para mostrarte dónde estás en el campus."
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#1a1a1a"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.miguel.ubicat",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyDzPtZOLoAz6sESAG8Xx6cRLhwAgVEOFtc"
+        }
+      },
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"

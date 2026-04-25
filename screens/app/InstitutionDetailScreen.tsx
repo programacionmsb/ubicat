@@ -34,6 +34,15 @@ export default function InstitutionDetailScreen({ route, navigation }: any) {
         </View>
       </View>
 
+      <TouchableOpacity
+        style={styles.mapButton}
+        onPress={() => navigation.navigate('CampusMap', { institution: institution })}
+      >
+        <Ionicons name="map-outline" size={22} color="#0af" />
+        <Text style={styles.mapButtonText}>Ver mapa del campus</Text>
+        <Ionicons name="chevron-forward" size={20} color="#0af" />
+      </TouchableOpacity>
+
       {loading ? (
         <View style={styles.centered}>
           <ActivityIndicator size="large" color="#0af" />
@@ -105,4 +114,14 @@ const styles = StyleSheet.create({
   errorBox: { alignItems: 'center', padding: 24, margin: 16, backgroundColor: '#2a1a1a', borderRadius: 12 },
   errorTitle: { fontSize: 16, fontWeight: 'bold', color: '#f44', marginTop: 12 },
   errorText: { color: '#faa', textAlign: 'center', marginTop: 8, fontSize: 13 },
+  mapButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#2a2a2a',
+    marginHorizontal: 16,
+    marginBottom: 12,
+    padding: 14,
+    borderRadius: 12,
+  },
+  mapButtonText: { color: '#0af', fontWeight: 'bold', fontSize: 15, marginLeft: 10 },
 });

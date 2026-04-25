@@ -3,6 +3,7 @@ import HomeScreen from '../screens/app/HomeScreen';
 import InstitutionDetailScreen from '../screens/app/InstitutionDetailScreen';
 import BuildingDetailScreen from '../screens/app/BuildingDetailScreen';
 import PointDetailScreen from '../screens/app/PointDetailScreen';
+import CampusMapScreen from '../screens/app/CampusMapScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -13,6 +14,7 @@ export default function HomeStack() {
       <Stack.Screen name="InstitutionDetail" component={InstitutionDetailScreen} />
       <Stack.Screen name="BuildingDetail" component={BuildingDetailScreen} />
       <Stack.Screen name="PointDetail" component={PointDetailScreen} />
+      <Stack.Screen name="CampusMap" component={CampusMapScreen} />
     </Stack.Navigator>
   );
 }
