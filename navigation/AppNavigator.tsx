@@ -3,7 +3,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import HomeStack from './HomeStack';
 import SearchStack from './SearchStack';
-import FavoritesScreen from '../screens/app/FavoritesScreen';
+import FavoritesStack from './FavoritesStack';
 import ProfileScreen from '../screens/app/ProfileScreen';
 
 const Tab = createBottomTabNavigator();
@@ -37,7 +37,7 @@ export default function AppNavigator() {
     >
       <Tab.Screen name="Home" component={HomeStack} options={{ title: 'Inicio' }} />
       <Tab.Screen name="Search" component={SearchStack} options={{ title: 'Buscar' }} />
-      <Tab.Screen name="Favorites" component={FavoritesScreen} options={{ title: 'Favoritos' }} />
+      <Tab.Screen name="Favorites" component={FavoritesStack} options={{ title: 'Favoritos' }} />
       <Tab.Screen name="Profile" component={ProfileScreen} options={{ title: 'Perfil' }} />
     </Tab.Navigator>
   );

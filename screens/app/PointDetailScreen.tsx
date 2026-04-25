@@ -1,7 +1,9 @@
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { PointOfInterest, PointCategory } from '../../types/database';
+import { addFavorite, removeFavorite, isFavorite } from '../../services/favorites';
 
 const DAYS_LABELS: Record<string, string> = {
   lunes: 'Lunes',
@@ -15,6 +17,38 @@ const DAYS_LABELS: Record<string, string> = {
 
 export default function PointDetailScreen({ route, navigation }: any) {
   const point: PointOfInterest = route.params.point;
+  const [favorited, setFavorited] = useState(false);
+  const [loadingFav, setLoadingFav] = useState(true);
+
+  useEffect(() => {
+    checkFavorite();
+  }, []);
+
+  async function checkFavorite() {
+    const isFav = await isFavorite(point.id);
+    setFavorited(isFav);
+    setLoadingFav(false);
+  }
+
+  async function handleToggleFavorite() {
+    setLoadingFav(true);
+    if (favorited) {
+      const { error } = await removeFavorite(point.id);
+      if (error) {
+        Alert.alert('Error', error);
+      } else {
+        setFavorited(false);
+      }
+    } else {
+      const { error } = await addFavorite(point.id);
+      if (error) {
+        Alert.alert('Error', error);
+      } else {
+        setFavorited(true);
+      }
+    }
+    setLoadingFav(false);
+  }
 
   function getCategoryIcon(category: PointCategory): any {
     switch (category) {
@@ -91,7 +125,7 @@ export default function PointDetailScreen({ route, navigation }: any) {
         {point.schedule && Object.keys(point.schedule).length > 0 && (
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Horarios</Text>
-            {Object.entries(point.schedule).map(([day, hours]) => (
+            {Object.entries(point.schedule).map(([day, hours]: [string, any]) => (
               <View key={day} style={styles.scheduleRow}>
                 <Text style={styles.dayLabel}>{DAYS_LABELS[day] || day}</Text>
                 <Text style={styles.hoursLabel}>{hours}</Text>
@@ -100,12 +134,20 @@ export default function PointDetailScreen({ route, navigation }: any) {
           </View>
         )}
 
-        <TouchableOpacity style={styles.favoriteButton}>
-          <Ionicons name="star-outline" size={22} color="#0af" />
-          <Text style={styles.favoriteText}>Agregar a favoritos</Text>
+        <TouchableOpacity
+          style={[styles.favoriteButton, favorited && styles.favoriteButtonActive]}
+          onPress={handleToggleFavorite}
+          disabled={loadingFav}
+        >
+          <Ionicons
+            name={favorited ? 'star' : 'star-outline'}
+            size={22}
+            color={favorited ? '#ffb700' : '#0af'}
+          />
+          <Text style={[styles.favoriteText, favorited && styles.favoriteTextActive]}>
+            {loadingFav ? 'Cargando...' : favorited ? 'Quitar de favoritos' : 'Agregar a favoritos'}
+          </Text>
         </TouchableOpacity>
-
-        <Text style={styles.comingSoon}>Próximamente: ver ubicación en el mapa 🗺️</Text>
       </ScrollView>
     </SafeAreaView>
   );
@@ -143,6 +185,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#2a2a2a', padding: 16, borderRadius: 12, marginBottom: 16,
     borderWidth: 1, borderColor: '#0af',
   },
+  favoriteButtonActive: { backgroundColor: '#3a2a00', borderColor: '#ffb700' },
   favoriteText: { color: '#0af', fontWeight: 'bold', marginLeft: 8, fontSize: 15 },
-  comingSoon: { color: '#666', textAlign: 'center', fontSize: 13, fontStyle: 'italic' },
+  favoriteTextActive: { color: '#ffb700' },
 });
