@@ -12,6 +12,8 @@ export default function CampusMapScreen({ route, navigation }: any) {
   const [buildings, setBuildings] = useState<Building[]>([]);
   const [loading, setLoading] = useState(true);
   const [locationAllowed, setLocationAllowed] = useState(false);
+  const [mapType, setMapType] = useState<'standard' | 'satellite' | 'hybrid'>('standard');
+  const [layersExpanded, setLayersExpanded] = useState(false);
   const mapRef = useRef<MapView>(null);
 
   async function loadData() {
@@ -86,6 +88,7 @@ export default function CampusMapScreen({ route, navigation }: any) {
         <MapView
           ref={mapRef}
           provider={Platform.OS === 'android' ? PROVIDER_GOOGLE : undefined}
+          mapType={mapType}
           style={styles.map}
           initialRegion={{
             latitude: institution.latitude,
@@ -109,6 +112,37 @@ export default function CampusMapScreen({ route, navigation }: any) {
             );
           })}
         </MapView>
+
+        <View style={styles.layersContainer}>
+          {layersExpanded && (
+            <View style={styles.layersOptions}>
+              <TouchableOpacity
+                style={[styles.layerOption, mapType === 'standard' && styles.layerOptionActive]}
+                onPress={() => { setMapType('standard'); setLayersExpanded(false); }}
+              >
+                <Ionicons name="map" size={18} color="#fff" />
+                <Text style={styles.layerOptionText}>Mapa</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.layerOption, mapType === 'satellite' && styles.layerOptionActive]}
+                onPress={() => { setMapType('satellite'); setLayersExpanded(false); }}
+              >
+                <Ionicons name="globe" size={18} color="#fff" />
+                <Text style={styles.layerOptionText}>Satélite</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.layerOption, mapType === 'hybrid' && styles.layerOptionActive]}
+                onPress={() => { setMapType('hybrid'); setLayersExpanded(false); }}
+              >
+                <Ionicons name="earth" size={18} color="#fff" />
+                <Text style={styles.layerOptionText}>Híbrido</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+          <TouchableOpacity style={styles.layersButton} onPress={() => setLayersExpanded(!layersExpanded)}>
+            <Ionicons name={layersExpanded ? 'close' : 'layers'} size={22} color="#fff" />
+          </TouchableOpacity>
+        </View>
 
         <TouchableOpacity style={styles.centerButton} onPress={centerOnInstitution}>
           <Ionicons name="locate" size={22} color="#fff" />
@@ -161,4 +195,52 @@ const styles = StyleSheet.create({
   },
   legendTitle: { color: '#fff', fontSize: 14, fontWeight: 'bold', marginBottom: 4 },
   legendHint: { color: '#888', fontSize: 12 },
+  layersContainer: {
+    position: 'absolute',
+    top: 16,
+    right: 16,
+    alignItems: 'flex-end',
+  },
+  layersButton: {
+    backgroundColor: '#0af',
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+  },
+  layersOptions: {
+    backgroundColor: '#1a1a1a',
+    borderRadius: 12,
+    padding: 6,
+    marginBottom: 8,
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+  },
+  layerOption: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    borderRadius: 8,
+    marginVertical: 2,
+    minWidth: 130,
+  },
+  layerOptionActive: {
+    backgroundColor: '#0af',
+  },
+  layerOptionText: {
+    color: '#fff',
+    fontSize: 14,
+    marginLeft: 10,
+    fontWeight: '500',
+  },
 });
