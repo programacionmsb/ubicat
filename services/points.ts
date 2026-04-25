@@ -44,3 +44,37 @@ export async function getPointById(id: string): Promise<{ data: PointOfInterest 
   if (error) return { data: null, error: error.message };
   return { data, error: null };
 }
+
+export async function searchPoints(query: string): Promise<{ data: any[]; error: string | null }> {
+  if (!query || query.trim().length < 2) {
+    return { data: [], error: null };
+  }
+
+  const searchTerm = `%${query.trim()}%`;
+
+  const { data, error } = await supabase
+    .from('points_of_interest')
+    .select(`
+      *,
+      floors (
+        id,
+        name,
+        level,
+        buildings (
+          id,
+          name,
+          institution_id,
+          institutions (
+            id,
+            name
+          )
+        )
+      )
+    `)
+    .or(`name.ilike.${searchTerm},description.ilike.${searchTerm}`)
+    .order('name', { ascending: true })
+    .limit(30);
+
+  if (error) return { data: [], error: error.message };
+  return { data: data || [], error: null };
+}
